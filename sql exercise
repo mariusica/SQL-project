@@ -1,0 +1,44 @@
+1. Perform the following queries on "Locations" table: 
+
+a. select all locations that have the capacity between 200 and 1000 persons
+SELECT * FROM Locations WHERE Capacity BETWEEN 200 AND 1000
+
+b. select all locations that have "a" in their name
+SELECT * FROM Locations WHERE Locationname LIKE '%a%'
+
+c. Select all locations that are not in Cluj-Napoca
+SELECT * FROM Locations WHERE City NOT LIKE 'Cluj-Napoca'
+
+d. Select all locations that have the cost 0,500,600, are in Brasov and Cluj-Napoca, and can sustain a capacity greater that 1000 persons
+SELECT * FROM Locations WHERE Cost IN (0,500,600) AND City IN ('Cluj-Napoca','Brasov') AND Capacity>1000
+
+2. Perform the following queries on "Events" table: 
+a. return the results for min, max, average based on "EventCost" column
+SELECT MIN(Eventcost),MAX(Eventcost),AVG(Eventcost) FROM Events
+
+b. count how many events are associated to location 1 and 2
+SELECT COUNT(LocationID) from Events WHERE LocationID IN (1,2)
+
+c. compute the average cost obtained from location 1
+SELECT AVG(Eventcost) FROM Events WHERE LocationID=1
+
+d. order the events based on their defined date
+SELECT * FROM Events ORDER BY Eventdate 
+
+e. compute the total cost associated with each location (hint grouped by)
+SELECT SUM(Eventcost),LocationID FROM Events GROUP BY LocationID
+
+
+
+3. Perform the following queries using both tables
+a. Order location name, descending, after their associated event cost
+SELECT Events.Eventcost,Locations.Locationname FROM Events JOIN Locations ON Events.LocationID=Locations.LocationID ORDER BY Eventcost DESC
+
+b. Select location name, location cost and event cost for a specific event
+SELECT Locations.Locationname,Locations.Cost,Events.Eventname,Events.Eventcost FROM Locations,Events WHERE Locations.LocationID=Events.LocationID 
+sau
+SELECT l.Locationname,l.Cost,e.Eventname,e.Eventcost FROM Locations l,Events e WHERE l.LocationID=e.LocationID
+
+c. Return the first 3 events (with eventName, locationname), that have the greatest event cost, in alphabetical order (after their names)
+SELECT Locations.Locationname,Events.Eventname,Events.Eventcost FROM Locations,Events WHERE Locations.LocationID=Events.LocationID ORDER BY Eventcost DESC, Eventname ASC FETCH FIRST 3 ROWS ONLY
+
